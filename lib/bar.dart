@@ -1,48 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:simple_bar_chart/bar_data.dart';
 import 'package:simple_bar_chart/simple_bar_chart.dart';
 
-class Bar extends StatelessWidget {
-  const Bar(
-      {required this.value,
-      required this.index,
-      required this.selectedColor,
-      required this.unselectedColor});
-
-  final double value;
-  final int index;
-  final Color selectedColor;
-  final Color unselectedColor;
+class Bar extends ConsumerWidget {
+  const Bar();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    ChartData chartData = ref.watch(chartDataProvider);
+    BarData barData = ref.watch(barDataProvider);
+
+    bool isPointed = ref.watch(pointIndexProvider.select((value) {
+      return value.state == barData.index;
+    }));
+
     return SizedBox(
-      width: barWidth,
-      height: barHeight,
+      width: chartData.itemWidth,
+      height: chartData.itemHeight,
       child: CustomPaint(
-        painter: BarPainter(value, index, selectedColor, unselectedColor),
+        painter: BarPainter(barData: barData, chartData: chartData, isPointed: isPointed),
       ),
     );
   }
 }
 
 class BarPainter extends CustomPainter {
-  const BarPainter(
-      this.value, this.index, this.selectedColor, this.unselectedColor);
-
-  final int index;
-  final double value;
-  final Color selectedColor;
-  final Color unselectedColor;
+  final BarData barData;
+  final ChartData chartData;
+  final bool isPointed;
+  const BarPainter({required this.barData,required this.chartData,required this.isPointed});
 
   @override
   void paint(Canvas canvas, Size size) {
     final strokeWidth = 12.0;
     final center = Offset(size.width / 2, size.height - 20);
-    final end = Offset(size.width / 2, size.height - 20 - value);
+    final end = Offset(size.width / 2, size.height - 20 - barData.value);
 
     final paint = Paint()
       ..strokeWidth = strokeWidth
-      ..color = (index == selectedIndex) ? selectedColor : unselectedColor
+      ..color = isPointed ? chartData.selectedColor : chartData.unselectedColor
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
@@ -52,6 +50,6 @@ class BarPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     // TODO: implement shouldRepaint
-    return false;
+    return true;
   }
 }

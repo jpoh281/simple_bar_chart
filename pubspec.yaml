@@ -9,8 +9,10 @@ environment:
   flutter: ">=2.2.0"
 
 dependencies:
+  flutter_riverpod: ^1.0.0-dev.6
   flutter:
     sdk: flutter
+
 
 dev_dependencies:
   flutter_test:
