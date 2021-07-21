@@ -60,6 +60,7 @@ class _SampleChartState extends State<SampleChart> {
         child: Column(
           children: [
             SimpleBarChart(chartData: ChartData(
+              strokeWidth: 12,
                 scrollController: scrollController,
                 chartBackgroundColor: Colors.transparent,
                 selectedColor: Colors.green,

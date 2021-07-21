@@ -34,12 +34,11 @@ class BarPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final strokeWidth = 12.0;
     final center = Offset(size.width / 2, size.height - 20);
     final end = Offset(size.width / 2, size.height - 20 - barData.value);
 
     final paint = Paint()
-      ..strokeWidth = strokeWidth
+      ..strokeWidth = chartData.strokeWidth
       ..color = isPointed ? chartData.selectedColor : chartData.unselectedColor
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;

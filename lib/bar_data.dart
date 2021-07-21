@@ -20,6 +20,8 @@ class ChartData {
   final Color chartBackgroundColor;
   final Border chartBorder;
 
+  final double strokeWidth;
+
   final double itemWidth;
   final double itemHeight;
   final double itemBottomHeight;
@@ -34,6 +36,7 @@ class ChartData {
       required this.chartBorder,
       required this.unselectedColor,
       required this.unselectedTextStyle,
+        required this.strokeWidth,
       required this.chartWidth,
       required this.chartHeight,
       required this.itemWidth,
