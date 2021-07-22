@@ -34,8 +34,8 @@ class BarPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height - 20);
-    final end = Offset(size.width / 2, size.height - 20 - barData.value);
+    final center = Offset(size.width / 2, size.height - 10);
+    final end = Offset(size.width / 2, size.height - 10 - (chartData.itemHeight * 75 / 100));
 
     final paint = Paint()
       ..strokeWidth = chartData.strokeWidth

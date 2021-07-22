@@ -31,16 +31,22 @@ class _SimpleBarChartState extends State<SimpleBarChart> {
         ],
         child: Center(
           child: Container(
-            decoration: BoxDecoration(
-              border : widget.chartData.chartBorder
-            ),
+            decoration: BoxDecoration(border: widget.chartData.chartBorder),
             width: widget.chartData.chartWidth,
             height: widget.chartData.chartHeight,
             child: Stack(children: [
               Container(
                 color: widget.chartData.chartBackgroundColor,
               ),
-              Center(child: SimpleBarChartWidget()),
+              SimpleBarChartWidget(),
+              Column(
+                children: [
+                  SizedBox(height: widget.chartData.chartHeight / 3 * 1),
+                  Divider(height: 1, color: Colors.red),
+                  SizedBox(height: widget.chartData.chartHeight / 3 * 1),
+                  Divider(height: 1, color: Colors.red),
+                ],
+              )
             ]),
           ),
         ));
@@ -76,7 +82,8 @@ class _SimpleBarChartWidgetState extends ConsumerState<SimpleBarChartWidget> {
         } else if (scrollNotification is ScrollUpdateNotification) {
           int nearestBarIndex =
               nearestBar(scrollNotification.metrics.extentBefore);
-          if (ref.read(pointIndexProvider).state != nearestBarIndex) {
+          if (ref.read(pointIndexProvider).state != nearestBarIndex &&
+              nearestBarIndex < ref.watch(chartDataProvider).itemCount) {
             ref.read(pointIndexProvider).state = nearestBarIndex;
             HapticFeedback.heavyImpact();
           }
@@ -85,10 +92,12 @@ class _SimpleBarChartWidgetState extends ConsumerState<SimpleBarChartWidget> {
             _scrollLock = true;
             int nearestBarIndex =
                 nearestBar(scrollNotification.metrics.extentBefore);
-            ref.read(pointIndexProvider).state = nearestBarIndex;
-            ref.watch(chartDataProvider).scrollController.jumpTo(
-                nearestBarIndex * ref.watch(chartDataProvider).itemWidth);
-            _scrollLock = false;
+            if (nearestBarIndex < ref.watch(chartDataProvider).itemCount) {
+              ref.read(pointIndexProvider).state = nearestBarIndex;
+              ref.watch(chartDataProvider).scrollController.jumpTo(
+                  nearestBarIndex * ref.watch(chartDataProvider).itemWidth);
+              _scrollLock = false;
+            }
           }
           _isScrolling = false;
         }

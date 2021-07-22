@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:simple_bar_chart/bar_data.dart';
 import 'package:simple_bar_chart/simple_bar_chart.dart';
@@ -47,7 +49,7 @@ class _SampleChartState extends State<SampleChart> {
     super.initState();
 
     datas = List.generate(300, (index) =>
-        BarData(index: index, value: 50 + index * 0.2, label: "1"));
+        BarData(index: index, value: Random().nextInt(500).toDouble(), label: "1"));
   }
 
   @override
@@ -69,10 +71,11 @@ class _SampleChartState extends State<SampleChart> {
                 unselectedTextStyle: TextStyle(color: Colors.grey),
                 itemBottomHeight: 40.0,
                 itemWidth: 70.0,
-                itemHeight: 140.0,
+                itemHeight: 500.0,
                 itemCount: 300,
+                baseLines: [75],
                 chartWidth: size!.width - 10.0,
-                chartHeight: 200,
+                chartHeight: 544,
                 chartBorder: Border(
                   top: BorderSide(color: Colors.black, width: 2.0),
                   left: BorderSide(color: Colors.black, width: 2.0),

@@ -21,7 +21,7 @@ class ChartData {
   final Border chartBorder;
 
   final double strokeWidth;
-
+  final List<double> baseLines;
   final double itemWidth;
   final double itemHeight;
   final double itemBottomHeight;
@@ -36,11 +36,12 @@ class ChartData {
       required this.chartBorder,
       required this.unselectedColor,
       required this.unselectedTextStyle,
-        required this.strokeWidth,
+      this.baseLines = const [],
+      required this.strokeWidth,
       required this.chartWidth,
       required this.chartHeight,
       required this.itemWidth,
-        required this.itemBottomHeight,
+      required this.itemBottomHeight,
       required this.chartBackgroundColor,
       required this.itemHeight,
       this.itemBottomBackgroundColor = Colors.transparent,
