@@ -39,14 +39,6 @@ class _SimpleBarChartState extends State<SimpleBarChart> {
                 color: widget.chartData.chartBackgroundColor,
               ),
               SimpleBarChartWidget(),
-              Column(
-                children: [
-                  SizedBox(height: widget.chartData.chartHeight / 3 * 1),
-                  Divider(height: 1, color: Colors.red),
-                  SizedBox(height: widget.chartData.chartHeight / 3 * 1),
-                  Divider(height: 1, color: Colors.red),
-                ],
-              )
             ]),
           ),
         ));
@@ -62,6 +54,7 @@ final chartDataProvider =
 final barDataListProvider =
     Provider<List<BarData>>((ref) => throw UnimplementedError());
 final barDataProvider = Provider<BarData>((ref) => throw UnimplementedError());
+
 
 class SimpleBarChartWidget extends ConsumerStatefulWidget {
   const SimpleBarChartWidget();

@@ -42,6 +42,7 @@ class _SampleChartState extends State<SampleChart> {
   ScrollController scrollController = ScrollController();
   Size? size;
   late List<BarData> datas;
+  bool value = false;
 
   @override
   void initState() {
@@ -57,10 +58,21 @@ class _SampleChartState extends State<SampleChart> {
     if (size == null) size = MediaQuery
         .of(context)
         .size;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
+            Switch(
+              value: value,
+              onChanged: (month){
+                print(value);
+                setState(() {
+                  this.value = month;
+                });
+                scrollController.jumpTo(70 * 300 + size!.width -10);
+              },
+            ),
             SimpleBarChart(chartData: ChartData(
               strokeWidth: 12,
                 scrollController: scrollController,
@@ -73,7 +85,6 @@ class _SampleChartState extends State<SampleChart> {
                 itemWidth: 70.0,
                 itemHeight: 500.0,
                 itemCount: 300,
-                baseLines: [75],
                 chartWidth: size!.width - 10.0,
                 chartHeight: 544,
                 chartBorder: Border(
@@ -83,6 +94,7 @@ class _SampleChartState extends State<SampleChart> {
                   bottom: BorderSide(color: Colors.black, width: 2.0),
                 ) ,
             ), barDatas: datas),
+            Text("${value ? "월별" : "주별"}"),
           ],
         ),
       ),
