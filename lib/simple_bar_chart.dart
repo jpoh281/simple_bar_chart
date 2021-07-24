@@ -2,7 +2,6 @@ library simple_bar_chart;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:simple_bar_chart/bar.dart';
 import 'package:simple_bar_chart/bar_data.dart';
@@ -11,10 +10,10 @@ import 'package:simple_bar_chart/bar_text.dart';
 bool _scrollLock = false;
 bool _isScrolling = false;
 
+
 class SimpleBarChart extends StatefulWidget {
   final ChartData chartData;
   final List<BarData> barDatas;
-
   SimpleBarChart({required this.chartData, required this.barDatas});
 
   @override
@@ -38,7 +37,7 @@ class _SimpleBarChartState extends State<SimpleBarChart> {
               Container(
                 color: widget.chartData.chartBackgroundColor,
               ),
-              SimpleBarChartWidget(),
+              const SimpleBarChartWidget(),
             ]),
           ),
         ));
@@ -57,28 +56,26 @@ final barDataProvider = Provider<BarData>((ref) => throw UnimplementedError());
 
 
 class SimpleBarChartWidget extends ConsumerStatefulWidget {
-  const SimpleBarChartWidget();
+  const SimpleBarChartWidget({Key? key}) : super(key : key);
 
   @override
-  _SimpleBarChartWidgetState createState() => _SimpleBarChartWidgetState();
+  SimpleBarChartWidgetState createState() => SimpleBarChartWidgetState();
 }
 
-class _SimpleBarChartWidgetState extends ConsumerState<SimpleBarChartWidget> {
+class SimpleBarChartWidgetState extends ConsumerState<SimpleBarChartWidget> {
   @override
   Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
       onNotification: (scrollNotification) {
         if (scrollNotification is ScrollStartNotification) {
-          // print( ref.read(isScrollingProvider).state);
           _isScrolling = true;
-          // print( ref.read(isScrollingProvider).state);
         } else if (scrollNotification is ScrollUpdateNotification) {
           int nearestBarIndex =
               nearestBar(scrollNotification.metrics.extentBefore);
           if (ref.read(pointIndexProvider).state != nearestBarIndex &&
               nearestBarIndex < ref.watch(chartDataProvider).itemCount) {
             ref.read(pointIndexProvider).state = nearestBarIndex;
-            HapticFeedback.heavyImpact();
+            ref.read(chartDataProvider).onChanged!.call(ref.read(barDataListProvider)[nearestBarIndex]);
           }
         } else if (scrollNotification is ScrollEndNotification) {
           if (!_scrollLock) {
@@ -89,6 +86,7 @@ class _SimpleBarChartWidgetState extends ConsumerState<SimpleBarChartWidget> {
               ref.read(pointIndexProvider).state = nearestBarIndex;
               ref.watch(chartDataProvider).scrollController.jumpTo(
                   nearestBarIndex * ref.watch(chartDataProvider).itemWidth);
+              ref.read(chartDataProvider).onChanged!.call(ref.read(barDataListProvider)[nearestBarIndex]);
               _scrollLock = false;
             }
           }
@@ -145,8 +143,9 @@ class BarItem extends ConsumerWidget {
       onTapUp: (_) {
         if (!_isScrolling) {
           chartData.scrollController
-              .jumpTo(barData.index * chartData.itemWidth);
+              .animateTo(barData.index * chartData.itemWidth, duration: Duration(milliseconds: 300),curve : Curves.fastOutSlowIn);
           ref.read(pointIndexProvider).state = barData.index;
+          ref.read(chartDataProvider).onChanged!.call(barData);
         }
       },
       child: Column(
