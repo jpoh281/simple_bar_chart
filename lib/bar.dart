@@ -36,7 +36,6 @@ class BarPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final startHeight = size.height;
     final num barHeight =  chartData.itemHeight  * ( barData.value /  (chartData.maxValue + chartData.minValue)) - 10;
-    print(barHeight);
     final center = Offset(size.width / 2, startHeight);
     final end = Offset(size.width / 2, startHeight - barHeight);
 
